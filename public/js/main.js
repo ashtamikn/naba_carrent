@@ -36,7 +36,7 @@ $(document).ready(() => {
   $("#dateIn, #days").click(() => {
     let days = $("#days").val(),
       price = $("#price").val(),
-      hours = 20;
+      hours = 24;
 
     price *= days;
     hours *= days;

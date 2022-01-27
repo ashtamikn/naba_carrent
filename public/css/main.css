@@ -104,7 +104,7 @@ input::-webkit-input-placeholder {
   content: "";
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(8, 137, 206, 0.5);
   position: absolute;
   top: 0;
   left: 0;
@@ -222,4 +222,25 @@ input::-webkit-input-placeholder {
 }
 .fut{
   color: aliceblue;
+}
+
+.ashi {
+  background-color:rgb(235, 235, 88) !important;
+}
+.ashi:hover {
+  color:rgb(223, 27, 20) !important;
+  background-color: rgb(190, 190, 21) !important;;
+}
+
+.h24 {
+  color: black !important;
+}
+
+.rsvBtn {
+  color:#f7f7f7 !important;
+  background-color: blue !important;
+}
+
+.rsvBtn:hover {
+color: red !important;
 }

@@ -14,7 +14,7 @@ router.get("/:catalog", (req, res) => {
     WHERE name LIKE CONCAT('%', ?, '%');`,
     req.params.catalog,
     (err, result) => {
-      console.log(result,req.params)
+      // console.log(result,req.params)
       db.query(
         
         `SELECT * FROM cars

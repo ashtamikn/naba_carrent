@@ -46,7 +46,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", indexRouter);
-app.use("/data", dataRouter);
+// app.use("/data", dataRouter);
 app.use("/admin", adminRouter);
 app.use("/login", loginRouter);
 app.use("/logout", logoutRouter);
@@ -59,6 +59,9 @@ app.use("/register", registerRouter);
 app.use("/terms-of-use", termsOfUseRouter);
 app.use("/password-help", passwordHelpRouter);
 
+app.get("/policy", (req, res) => {
+  res.render("policy", { user: req.user });
+});
 // page not found
 app.get("*", (req, res) => {
   res.render("page_not_found", { user: req.user });

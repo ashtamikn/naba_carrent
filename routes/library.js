@@ -18,6 +18,7 @@ router.get("/", (req, res) => {
           res: req.query.res,
           carsArr: null,
           user: req.user,
+          // isReserv: false
         });
       else
         return res.render("library", {

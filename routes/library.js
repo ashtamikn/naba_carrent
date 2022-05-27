@@ -5,12 +5,10 @@ router.get("/", (req, res) => {
   if (!req.user) return res.redirect("/");
 
   db.query(
-    `SELECT * FROM reservations
-    JOIN cars ON reservations.idCar=cars.idCar
-    WHERE reservations.idUser LIKE ?
-    AND DATE(dateOut)>=CURDATE()
-    AND reservations.active NOT LIKE 0
-    AND cars.active NOT LIKE 0;`,
+    `SELECT * FROM Appointment
+    JOIN docdetails ON Appointment.Did=docdetails.Did
+    WHERE Appointment.Did LIKE ?
+    ;`,
     req.user.idUser,
     (err, result) => {
       if (!result.length)

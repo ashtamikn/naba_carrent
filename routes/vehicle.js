@@ -7,29 +7,28 @@ router.get("/", (req, res) => {
 
 router.get("/:vehicle_id", (req, res) => {
   db.query(
-    `SELECT * FROM cars
-    WHERE idCar LIKE ?
-    AND active NOT LIKE 0;`,
+    `SELECT * FROM docdetails
+    WHERE Did LIKE ?
+    ;`,
     req.params.vehicle_id,
     (err, result) => {
       if (!result.length)
         return res.render("page_not_found", { user: req.user });
       else {
         db.query(
-          `SELECT idCar, photo, model FROM cars
-        WHERE idCar NOT LIKE ?
-        AND active NOT LIKE 0
+          `SELECT * FROM docdetails
+        WHERE Did NOT LIKE ?
+        
         ORDER BY RAND()
         LIMIT 10;`,
           req.params.vehicle_id,
           (err1, result1) => {
             if (req.user) {
               db.query(
-                `SELECT * FROM reservations
-            WHERE idCar LIKE ?
-            AND idUser LIKE ?
-            AND DATE(dateOut)>=CURDATE()
-            AND active NOT LIKE 0;`,
+                `SELECT * FROM Appointment
+            WHERE Did LIKE ?
+            AND Did LIKE ?
+            ;`,
                 [req.params.vehicle_id, req.user.idUser],
                 (err2, result2) => {
                   return res.render("vehicle", {
@@ -66,7 +65,7 @@ router.post("/add/:car_id", (req, res) => {
     fullPrice: req.body.numbers,
   };
 
-  db.query(`INSERT into reservations SET ?`, resv, (err) => {
+  db.query(`INSERT into Appointmnet SET ?`, resv, (err) => {
     if (err) return res.send({ code: 400, failed: __print("add", err) });
     return res.redirect("/library?res=add");
   });
@@ -76,10 +75,9 @@ router.post("/edit/:res_id/", (req, res) => {
   if (!req.user) return res.redirect("/");
 
   db.query(
-    `UPDATE reservations
+    `UPDATE Appointment
     SET fullPrice=?,
-      dateIn=?,
-      dateOut=?
+      
     WHERE idReservation LIKE ?;`,
     [req.body.numbers, req.body.dateIn, req.body.dateOut, req.params.res_id],
     (err) => {
@@ -93,7 +91,7 @@ router.post("/rem/:res_id/", (req, res) => {
   if (!req.user) return res.redirect("/");
 
   db.query(
-    `DELETE FROM reservations
+    `DELETE FROM Appointment
     WHERE idReservation LIKE ?;`,
     req.params.res_id,
     (err) => {

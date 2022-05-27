@@ -10,7 +10,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((idUser, done) => {
   db.query(
-    `SELECT idUser, fullName, email, admin, active FROM users
+    `SELECT * FROM users
     WHERE idUser LIKE ?;`,
     idUser,
     (err, result) => {
@@ -32,7 +32,7 @@ function initPassport() {
         db.query(
           `SELECT * FROM users
       WHERE email LIKE ?
-      AND active NOT LIKE 0;`,
+      ;`,
           usernameField,
           (err, result) => {
             if (!result.length) return next(null, false);

@@ -3,8 +3,7 @@ const router = require("express").Router(),
 
 router.get("/", (req, res) => {
   db.query(
-    `SELECT * FROM cars
-    WHERE active>0
+    `SELECT * FROM docdetails
     ORDER BY RAND()
     LIMIT 4;`,
     (err, result) => {

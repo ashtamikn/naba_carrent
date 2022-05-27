@@ -16,8 +16,14 @@ router.post("/", (req, res, next) => {
       .update(req.body.email)
       .digest("hex"),
     user = {
-      admin: 0,
-      active: 1,
+      // admin: 0,
+      // active: 1,
+      prevhist:req.body.prevhistory,
+      phoneNo:req.body.phoneno,
+      bloodgrp:req.body.bloodgroup,
+      weight:req.body.weight,
+      height:req.body.height,
+      age:req.body.age,
       email: req.body.email,
       pass: passEncrypted,
       fullName: req.body.name,

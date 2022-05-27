@@ -5,15 +5,13 @@ router.get("/", (req, res) => {
   if (!req.user) return res.redirect("/");
   if (!req.user.admin) return res.redirect("/library/");
 
-  db.query(`SELECT * FROM cars;`, (err, result) => {
+  db.query(`SELECT * FROM docdetails;`, (err, result) => {
     db.query(
-      `SELECT * FROM reservations
-    JOIN cars ON reservations.idCar=cars.idCar
-    WHERE DATE(reservations.dateOut)>=CURDATE();`,
+      `SELECT * FROM Appointment
+    JOIN docdetails ON Appointment.Did =docdetails.Did;`,
       (err1, result1) => {
         db.query(
-          `SELECT idUser, fullName, email, admin, active
-      FROM users;`,
+          `SELECT * FROM users;`,
           (err2, result2) => {
             res.render("admin", {
               car: null,
@@ -37,11 +35,11 @@ router.get("/car/:car_id", (req, res) => {
   if (!req.user.admin) return res.redirect("/library/");
 
   db.query(
-    `SELECT * FROM cars WHERE idCar LIKE ?;`,
+    `SELECT * FROM docdetails WHERE Did LIKE ?;`,
     req.params.car_id,
     (err, result) => {
-      db.query(`SELECT name FROM brand;`, (err1, result1) => {
-        db.query(`SELECT DISTINCT type FROM cars;`, (err2, result2) => {
+      db.query(`SELECT desig FROM doctors;`, (err1, result1) => {
+        db.query(`SELECT DISTINCT type FROM docdetails;`, (err2, result2) => {
           return res.render("admin", {
             car: result[0],
             slctArr: result1,
@@ -66,10 +64,9 @@ router.get("/resv/:res_id", (req, res) => {
 
   db.query(
     `SELECT *
-    FROM ((reservations JOIN cars ON reservations.idCar=cars.idCar)
-    JOIN users ON reservations.idUser=users.idUser)
-    WHERE idReservation LIKE ?
-    AND DATE(dateOut)>=CURDATE();`,
+    FROM ((Appointment JOIN docdetails ON Appointment.Did=docdetails.Did)
+    JOIN users ON Appointment.idUser=users.idUser)
+    WHERE idReservation LIKE ?;`,
     req.params.res_id,
     (err, result) => {
       res.render("admin", {
@@ -91,7 +88,7 @@ router.get("/user/:user_id", (req, res) => {
   if (!req.user.admin) return res.redirect("/library/");
 
   db.query(
-    `SELECT idUser, fullName, email, admin, active FROM users
+    `SELECT * FROM users
     WHERE idUser LIKE ?;`,
     req.params.user_id,
     (err, result) => {
@@ -109,102 +106,10 @@ router.get("/user/:user_id", (req, res) => {
   );
 });
 
-router.post("/editCar/:car_id", (req, res) => {
-  if (!req.user) return res.redirect("/");
-  if (!req.user.admin) return res.redirect("/library/");
 
-  db.query(
-    `UPDATE cars
-    SET model=?,
-      year=?,
-      type=?,
-      brand=?,
-      price=?,
-      active=?
-    WHERE idCar LIKE ?;`,
-    [
-      req.body.model,
-      req.body.year,
-      req.body.type,
-      req.body.brand,
-      req.body.numbers,
-      req.body.active,
-      req.params.car_id,
-    ],
-    (err) => {
-      if (err) return res.send({ code: 400, failed: __print("change", err) });
-      return res.redirect("/admin?res=editCar");
-    }
-  );
-});
-
-router.post("/editRes/:res_id", (req, res) => {
-  if (!req.user) return res.redirect("/");
-  if (!req.user.admin) return res.redirect("/library/");
-
-  db.query(
-    `UPDATE reservations
-    SET fullPrice=?,
-      active=?,
-      dateIn=?,
-      dateOut=?
-    WHERE idReservation LIKE ?;`,
-    [
-      req.body.numbers,
-      req.body.active,
-      req.body.dateIn,
-      req.body.dateOut,
-      req.params.res_id,
-    ],
-    (err) => {
-      if (err) return res.send({ code: 400, failed: __print("change", err) });
-      return res.redirect("/admin?res=editRes");
-    }
-  );
-});
-
-router.post("/rem/:res_id/", (req, res) => {
-  if (!req.user) return res.redirect("/");
-  if (!req.user.admin) return res.redirect("/library/");
-
-  db.query(
-    `DELETE FROM reservations
-    WHERE idReservation LIKE ?;`,
-    req.params.res_id,
-    (err) => {
-      if (err) return res.send({ code: 400, failed: __print("delete", err) });
-      return res.redirect("/admin?res=rem");
-    }
-  );
-});
-
-router.post("/editUse/:user_id", (req, res) => {
-  if (!req.user) return res.redirect("/");
-  if (!req.user.admin) return res.redirect("/library/");
-
-  db.query(
-    `UPDATE users
-    SET fullName=?,
-      email=?,
-      admin=?,
-      active=?
-    WHERE idUser LIKE ?;`,
-    [
-      req.body.name,
-      req.body.email,
-      req.body.admin,
-      req.body.active,
-      req.params.user_id,
-    ],
-    (err) => {
-      if (err) return res.send({ code: 400, failed: __print("change", err) });
-      return res.redirect("/admin?res=editUse");
-    }
-  );
-});
 
 function __print(str, err) {
   return "It wasn't possible to " + str + " the data! Due to " + err;
 }
 
-module.exports = router;
+module.exports = router; 

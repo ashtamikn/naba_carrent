@@ -10,7 +10,7 @@
     <main class="container pb-5" role="main">
       <div class="container" role="tablist">
         <h6 class="classified">
-          <% switch (res) { case "add": %> Your reservation was
+          <% switch (res) { case "add": %> Your appointment was
           <strong> added </strong> successfully. <% break; case "edit": %> Your
           reservation was <strong> edited </strong> successfully. <% break; case
           "del":%> Your reservation was <strong> removed </strong> successfully.
@@ -26,30 +26,30 @@
             <img
               class="card-img-top img-fluid mx-auto d-block"
               loading="lazy"
-              src="/<%= car.photo %>"
-              alt="<%= car.model %> image"
+              
+              alt="<%= car.desig %> image"
             />
 
             <p class="card-text">
               <strong>
-                <i> <%= car.model %> </i>
+                <i> <%= car.desig %> </i>
               </strong>
               <br />
-              <a href="/catalog/<%= car.brand %>">
-                <%= car.brand %>
+              <a href="/catalog/<%= car.doctors %>">
+                <%= car.doctors %>
               </a>
               -
-              <i>&#8377; <%= car.fullPrice %></i>
+              <i>&#8377; <%= car.Consultation %></i>
               <br /><br />
-              <i class="col">
+              <!-- <i class="col">
                 <%= new Date(car.dateIn).toDateString() %>
               </i>
               <br />
               <i class="col">
                 <%= new Date(car.dateOut).toDateString() %>
-              </i>
+              </i> -->
             </p>
-            <a href="/vehicle/<%= car.idCar %>" class="btn btn-outline-primary">
+            <a href="/vehicle/<%= car.Did %>" class="btn btn-outline-primary">
               Edit
             </a>
           </div>
@@ -58,7 +58,7 @@
       </div>
       <% } else { %>
       <h4 class="text-center" style="margin: 255px 0 255px;">
-        Your reservation list is <strong> empty </strong> - head to
+        Your appointment list is <strong> empty </strong> - head to
         <a href="/catalog"> catalog.</a>
       </h4>
       <% } %>
